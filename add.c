@@ -2,8 +2,8 @@
 #include<stdlib.h>
 #include<string.h>
 char *add(char *a, char *b){
-	char *c = (char *)malloc(101 * sizeof(char));
-	char *s = (char *)malloc(101 * sizeof(char));
+	char *c = (char *)malloc(strlen(a) + 2);
+	char *s = (char *)malloc(strlen(a) + 2);
 	int i, k, count;
 	int x = strlen(a);
 	int y = strlen(b);
@@ -79,18 +79,16 @@ char *add(char *a, char *b){
 	}
 	else
 		l = k - 1;
-	for(i = 0, j = l; j >= 0; j--, i++)
-		s[i] = c[j];
+	int check = 0;
+	i = 0;
+	for(j = l; j >= 0; j--){
+		if(c[j] == '0' && check != 1);
+		else{
+			s[i] = c[j];
+			check = 1;
+			i++;
+		}
+	}
 	s[i] = '\0';
 	return s;
-}
-int main(){
-	char *a = (char *)malloc(100 * sizeof(char));
-	char *b = (char *)malloc(100 * sizeof(char));
-	
-	int i, k, count;
-	scanf("%s%s", a, b);
-	char *s = add(a, b);
-	printf("%s\n", s);
-	return 0;
 }

@@ -1,11 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-/*char ninecomp(char a){
-	char c = '9' - ((int)a - '0');
-	printf("%c\n",c);
-	return c;
-}*/
 char *sub(char *a, char *b){
 	char *c = (char *)malloc(101 * sizeof(char));
 	int i, k, count;
@@ -42,30 +37,20 @@ char *sub(char *a, char *b){
 		dota++;
 	for(i = 0; b[i] != '.' && b[i] != '\0'; i++)
 		dotb++;
-//	printf("%d %d\n",dota, x);
 	int m = (x - dota - 1) - (y - dotb - 1);
 	if(m > 0){
-		for(i = y, j = 0; j < m; j++, i++){
-			if(dotb == y && j == 0)
-				b[i] = '.';
-			else
-				b[i] = '0';
-		}
+		for(i = y, j = 0; j < m; j++, i++)
+			b[i] = '0';
 		y = i;
 		b[i] = '\0';
 	}
 	else if(m < 0){
 		m = -m;
-		for(i = x, j = 0; j < m; j++, i++){
-			if(dota == x && j == 0)
-				a[i] = '.';
-			else
-				a[i] = '0';
-		}
+		for(i = x, j = 0; j < m; j++, i++)
+			a[i] = '0';
 		x = i;
 		a[i] = '\0';
 	}
-	printf("%d %d\n", x, y);
 	if(x > y)
 		count = 1;
 	else if(x < y)
@@ -170,11 +155,9 @@ char *sub(char *a, char *b){
 			c[k] = temp + '0';
 
 	}
-//	c[k] = '\0';
-	printf("%c\n",c[k-1]);
 	int z = k;
 	for(i = z - 1; i > 0; i--){
-		if(c[i] == '0' && c[i - 1] != '.')
+		if(c[i] == '0')
 			k--;
 		else 
 			break;
@@ -189,14 +172,4 @@ char *sub(char *a, char *b){
 		s[i] = c[j];
 	s[i] = '\0';
 	return s;
-}
-
-int main(){
-	char *a = (char *)malloc(100 * sizeof(char));
-	char *b = (char *)malloc(100 * sizeof(char));
-	scanf("%s%s", a, b);
-	char *s = sub(a, b);
-
-	printf("%s\n", s);
-	return 0;
 }
