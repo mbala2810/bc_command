@@ -129,7 +129,7 @@ int main(int argc, char *argv[]){
 	if(argc == 1)
 		goto LOOP1;
 	if(strcmp(argv[1],"-h") == 0){
-LOOP1:		printf("usage: bc [options]\n");
+LOOP1:		printf("usage: ./project [options]\n");
 			printf("  -h --help       print this usage and exit\n");
 			printf("  -p --postfix    evaluates postfix expression\n");
 			printf("  -i --infix      evaluates infix expression\n");
