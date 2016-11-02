@@ -67,7 +67,7 @@ token *getnext(char *arr, int *reset) {
 			case ' ': case ',':
 				nextstate = SPC;
 				break;
-			case 'p':
+			case 'P': case 'p':
 				nextstate = OPND;
 				break;
 			default:
