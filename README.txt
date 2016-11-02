@@ -22,3 +22,5 @@ WORK DONE :
 7. p remembers the previous result.
 
 8. output base from 2 - 16 : sets base of output and returns it.
+
+9. operators and operands can be separated using commas, spaces or no spaces.
