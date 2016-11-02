@@ -1,12 +1,46 @@
+
+/*****************************************************************************
+ * Copyright (C) Balasubramanian M. mbasubram@gmail.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+ *****************************************************************************/
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-char *sub(char *a, char *b){
-	char *c = (char *)malloc(101 * sizeof(char));
+#include"integer.h"
+#include"token.h"
+char *sub1(char *s, char *p);
+/*character by character subtraction*/
+char *sub(char *num1, char *num2){
 	int i, k, count;
-	char *s = (char *)malloc(101 * sizeof(char));
-	int x = strlen(a);
-	int y = strlen(b);
+	int x = strlen(num1);
+	int y = strlen(num2);
+	char *c, *s, *a, *b;
+	a = (char *)malloc(x + 1);
+	b = (char *)malloc(y + 1);
+	strcpy(a, num1);
+	strcpy(b, num2);
+	if(x >= y){
+		c = (char *)malloc(x + 1);
+		s = (char *)malloc(x + 1);
+	}
+	else{
+		c = (char *)malloc(y + 1);
+		s = (char *)malloc(y + 1);
+	}
 	int dota = 0;
 	int dotb = 0;
 	int j, x1 = x;
@@ -57,18 +91,18 @@ char *sub(char *a, char *b){
 		count = 0;
 	else
 		count = 2;
-	int l, check = 0;
+	int l, check1 = 0;
 	if(count == 2){
 			if(a[0] > b[0]){
 				count = 1;
-				check = 1;
+				check1 = 1;
 			}
 			else if(a[0] < b[0]){
 				count = 0;
-				check = 1;
+				check1 = 1;
 			}
 	}
-	if(check == 0 && count == 2){
+	if(check1 == 0 && count == 2){
 		for(i = 1, j = 1; i < x; i++, j++){
 			if(a[i] > b[j]){
 				count = 1;
@@ -82,7 +116,7 @@ char *sub(char *a, char *b){
 		if(i == x)
 			count = 1;
 	}
-	int temp, d;
+	int ans1, d;
 		for(i = x - 1,j = y - 1, k = 0; i >= 0 || j >= 0; k++){
 			if(a[i] == '.' || b[j] == '.'){
 				c[k] = '.';
@@ -93,9 +127,9 @@ char *sub(char *a, char *b){
 			if(count == 1){
 				if(j != -1){
 					if(a[i] >= b[j])
-						temp = a[i] - b[j];
+						ans1 = a[i] - b[j];
 					else{
-						temp = 10 + a[i] - b[j];
+						ans1 = 10 + a[i] - b[j];
 						if(a[i - 1] != '.' && a[i - 1] != '0')
 							a[i - 1] = a[i - 1] - 1;
 						else if(a[i - 1] == '.' && a[i - 2] != '0')
@@ -117,16 +151,16 @@ char *sub(char *a, char *b){
 					j--;
 				}
 				else{
-					temp = a[i] - '0';
+					ans1 = a[i] - '0';
 					i--;
 				}
 			}
 			else if(count == 0){
 				if(i != -1){
 					if(b[j] >= a[i])
-						temp = b[j] - a[i];
+						ans1 = b[j] - a[i];
 					else{
-						temp = 10 + b[j] - a[i];
+						ans1 = 10 + b[j] - a[i];
 						if(b[j - 1] != '.' && b[j - 1] != '0')
 							b[j - 1] = b[j - 1] - 1;
 						else if(b[j - 1] == '.' && b[j - 2] != '0')
@@ -148,13 +182,12 @@ char *sub(char *a, char *b){
 					j--;
 				}
 				else{
-					temp = b[j] - '0';
+					ans1 = b[j] - '0';
 					j--;
 				}
 			}
-			c[k] = temp + '0';
-
-	}
+			c[k] = ans1 + '0';
+		}
 	int z = k;
 	for(i = z - 1; i > 0; i--){
 		if(c[i] == '0')
@@ -168,8 +201,70 @@ char *sub(char *a, char *b){
 	}
 	else
 		l = k - 1;
-	for(i = 0, j = l; j >= 0; j--, i++)
+	for(i = 0, j = l; j >= 0; j--, i++){
 		s[i] = c[j];
+	}
 	s[i] = '\0';
+	free(c);
+	return s;
+}
+char *subtract(char *x, char *y){
+	if(strcmp(x, "0") == 0 && strcmp(y, "0") == 0)
+		return "0";
+	if(strcmp(y, "0") == 0)
+		return x;
+	char *result, *temp;
+	if(x[0] == '-' && y[0] != '-'){
+		result = add(&x[1], y);
+		temp = (char *)malloc(strlen(result) + 2);
+		temp[0] = '-';
+		temp[1] = '\0';
+		strcat(temp, result);
+		return temp;
+	}
+	else if(x[0] == '-' && y[0] == '-')
+		result = sub1(&y[1], &x[1]);
+	else if(x[0] != '-' && y[0] == '-')
+		result = add(x, &y[1]);
+	else if(x[0] != '-' && y[0] != '-')
+		result = sub1(x, y);
+	return result;
+}
+/* sub1 is a function that handles -ve and +ve integers and acc. calls the sub function*/
+char *sub1(char *s, char *p){
+	int dotlen1, dotlen2, len1;
+	dotlen1 = checkdot(s);
+	dotlen2 = checkdot(p);
+	char *ans;
+	if(dotlen1 == 0 && dotlen2 == 0){
+		ans = sub(s, p);
+		return ans;
+	}
+	char *tmp;
+	if(dotlen1 >= dotlen2){
+		tmp = (char *)malloc(dotlen1 + 2);
+		len1 = dotlen1;
+	}
+	else{
+		tmp = (char *)malloc(dotlen2 + 2);
+		len1 = dotlen2;
+	}
+	int i;
+	tmp[0] = '1';
+	for(i = 1; i <= len1; i++)
+		tmp[i] = '0';
+	tmp[i] = '\0';
+	s = multiply(s, tmp);
+	p = multiply(p, tmp);
+	if(dotlen1 != 0){
+		for(i = 0; s[i] != '.'; i++);
+		s[i] = '\0';
+	}
+	if(dotlen2 != 0){
+		for(i = 0; p[i] != '.'; i++);
+		p[i] = '\0';
+	}
+	s = sub(s, p);
+	s = divides(s, tmp);
 	return s;
 }

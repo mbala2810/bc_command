@@ -18,46 +18,41 @@
  *****************************************************************************/
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "token.h"
-#include "oprndstack.h"
-/*postfix calculator*/
-char *postfix(char *str) {
-	token *t;
-	char *x, *y;
-	char *result;
-	oprndstack a;
-	inits(&a);
-	int reset = 0;
-	while(1) {
-		t = getnext(str, &reset);
-		if(t->type == OPERAND) { 
-			pushopnd(&a, t->s);
-		}
-		else if (t->type == OPERATOR) { 
-			if(!iempty(&a))
-				x = popopnd(&a);
-			else
-				return NULL; 
-			if(!iempty(&a))
-				y = popopnd(&a);
-			else
-				return NULL; 
-			result = calc(y, x, t->op);
-			pushopnd(&a, result);
-		}
-		else if (t->type == ERROR) 
-			return NULL; 
-		else {
-			if(!iempty(&a))
-				result = popopnd(&a);
-			else
-				return NULL;
-			if(iempty(&a))
-				return result;
-			else
-				return NULL; 
-		}
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include"integer.h"
+/*compares two numbers and returns 0 if both are same and answer less than zero if p < q and greater than zero if p > q*/
+int compare(char *p, char *q){
+	char *s = removezero(p);
+	char *r = removezero(q);
+	int j = strlen(s) - checkdot(s);
+	int k = strlen(r) - checkdot(r);
+	if(j < k)
+		return -1;
+	else if(j > k)
+		return 1;
+	else {
+		return strcmp(s, r);
 	}
+
+}
+char *removezero(char *s){
+	int i = 0, lens, j;
+	char *a;
+	lens = strlen(s);
+	if(s[0] != '0')
+		return s;
+	a = (char *)malloc(strlen(s) + 1);
+	strcpy(a, s);
+	while(a[i] == '0' && a[i] != '\0'){
+		for(j = 0; j < lens; j++)
+			a[j] = a[j + 1];
+		lens = lens - 1;
+	}
+	if(i == lens){
+		a[0] = '0';
+		a[1] = '\0';
+	}
+	return a;
 }

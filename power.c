@@ -20,44 +20,33 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "token.h"
-#include "oprndstack.h"
-/*postfix calculator*/
-char *postfix(char *str) {
-	token *t;
-	char *x, *y;
-	char *result;
-	oprndstack a;
-	inits(&a);
-	int reset = 0;
-	while(1) {
-		t = getnext(str, &reset);
-		if(t->type == OPERAND) { 
-			pushopnd(&a, t->s);
+#include <string.h>
+#include "integer.h"
+/* power of two numbers where y is always an int*/
+char *power(char *x, int y) {
+	char *term, *result;
+	result = (char *)malloc(2);
+	result[0] = '1';
+	result[1] = '\0';
+	if(strcmp(x, "0") == 0) 
+		if(y == 0) {
+			return NULL;
 		}
-		else if (t->type == OPERATOR) { 
-			if(!iempty(&a))
-				x = popopnd(&a);
-			else
-				return NULL; 
-			if(!iempty(&a))
-				y = popopnd(&a);
-			else
-				return NULL; 
-			result = calc(y, x, t->op);
-			pushopnd(&a, result);
-		}
-		else if (t->type == ERROR) 
-			return NULL; 
-		else {
-			if(!iempty(&a))
-				result = popopnd(&a);
-			else
-				return NULL;
-			if(iempty(&a))
-				return result;
-			else
-				return NULL; 
-		}
+		else 
+			return 	"0";
+	else /* x!=0 */ {
+		if(y == 0)
+			return "1";
+		else /* x!=0 y!=0 */{
+			term = (char *)malloc(strlen(x) + 1);
+			strcpy(term, x);
+			while(y) {
+				if(y % 2 == 1)
+					result = multiply(result, term);
+				y /= 2;
+				term = multiply(term, term);
+			}
+		}	
 	}
+	return result;
 }

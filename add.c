@@ -1,6 +1,28 @@
+
+/*****************************************************************************
+ * Copyright (C) Balasubramanian M. mbasubram@gmail.com
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+ *****************************************************************************/
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include"token.h"
+#include"integer.h"
+/*Adds two character arrays char by char and ignores the decimal point if it at all exists*/
 char *add(char *a, char *b){
 	char *c = (char *)malloc(strlen(a) + 2);
 	char *s = (char *)malloc(strlen(a) + 2);
@@ -90,5 +112,28 @@ char *add(char *a, char *b){
 		}
 	}
 	s[i] = '\0';
+	free(c);
 	return s;
+}
+/* function addition which takes care of negative and positive integers and accordingly calls add*/
+char *addition(char *x, char *y){
+	if(strcmp(x, "0") == 0 && strcmp(y, "0") == 0)
+		return "0";
+	char *result, *temp;
+	if(x[0] == '-' && y[0] == '-'){
+		result = add(&x[1], &y[1]);
+		temp = (char *)malloc(strlen(result) + 2);
+		temp[0] = '-';
+		temp[1] = '\0';
+		strcat(temp, result);
+		return temp;
+	}
+	else if(x[0] == '-' && y[0] != '-')
+		result = sub1(y, &x[1]);
+	else if(x[0] != '-' && y[0] == '-')
+		result = sub1(x, &y[1]);
+	else if(x[0] != '-' && y[0] != '-')
+		result = add(x, y);
+	return result;
+
 }
