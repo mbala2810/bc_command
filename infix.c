@@ -261,10 +261,14 @@ int main(int argc, char *argv[]){
 	   		else{
 				reset = 1;
 				if(h != 0){
-					ans = base_change(ans, h);
+					if(ans[0] == '-'){
+						printf("-");
+						ans = base_change(&ans[1], h);
+					}
+					else
+						ans = base_change(ans, h);
 				}
 				printans(ans);
-			//	fprintf(stdout, "%s\n", ans);
 				pushopnd(&s1, ans);
 			}
 		}
